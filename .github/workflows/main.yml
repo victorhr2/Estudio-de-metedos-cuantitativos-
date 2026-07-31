@@ -1,0 +1,28 @@
+name: AI Trading Bot Auto-Pilot
+
+on:
+  schedule:
+    - cron: '30 13 * * 1-5'
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install alpaca-py yfinance pandas numpy torch transformers
+
+      - name: Run Trading Bot
+        env:
+          APCA_API_KEY_ID: ${{ secrets.APCA_API_KEY_ID }}
+          APCA_API_SECRET_KEY: ${{ secrets.APCA_API_SECRET_KEY }}
+        run: |
+          python main.py
